@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NabbleAI - Discover Your Career DNA</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1E40AF;
+            --accent: #10B981;
+            --accent-orange: #F59E0B;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-light: #94A3B8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --bg-tertiary: #F1F5F9;
+            --border: #E2E8F0;
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+            --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.1);
+            --shadow-lg: 0 12px 24px rgba(15, 23, 42, 0.12);
+            --gradient-primary: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+            --gradient-accent: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .logo-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.75rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--primary);
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.05rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(37, 99, 235, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .hero-highlight {
+            color: var(--primary);
+            position: relative;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .hero-visual {
+            position: relative;
+            height: 500px;
+        }
+
+        .cognitive-card {
+            position: absolute;
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .cognitive-card-1 {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .cognitive-card-2 {
+            top: 50%;
+            right: 15%;
+            animation-delay: 1s;
+        }
+
+        .cognitive-card-3 {
+            bottom: 15%;
+            left: 20%;
+            animation-delay: 2s;
+        }
+
+        .card-title {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .progress-mini {
+            width: 100px;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-mini-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+        }
+
+        /* Features Section */
+        .section {
+            padding: 6rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section-description {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .features-grid {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Methodology Section */
+        .methodology {
+            background: var(--bg-secondary);
+        }
+
+        .method-steps {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .method-step {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .step-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .step-feature-tag {
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Assessment Interface */
+        .assessment-container {
+            min-height: 100vh;
+            padding: 6rem 2rem 4rem;
+            background: var(--bg-secondary);
+        }
+
+        .assessment-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .progress-header {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .progress-percentage {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .question-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 3rem;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .question-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .question-hint {
+            background: var(--bg-secondary);
+            padding: 1rem 1.25rem;
+            border-left: 3px solid var(--primary);
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .answer-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .answer-option {
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .answer-option:hover {
+            background: white;
+            border-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .answer-option.selected {
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .option-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            flex-shrink: 0;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .answer-option.selected .option-radio {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+
+        .answer-option.selected .option-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .option-text {
+            flex: 1;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .question-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Results */
+        .results-container {
+            min-height: 100vh;
+            padding: 6rem 2rem 4rem;
+            background: var(--bg-secondary);
+        }
+
+        .results-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .results-hero {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .results-hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .results-section {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .results-section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .traits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .trait-item {
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .trait-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .trait-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .trait-score {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .trait-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .trait-bar-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 6px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .career-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .career-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .career-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .career-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .career-match {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .career-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .career-badge.safe {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .career-badge.moderate {
+            background: rgba(245, 158, 11, 0.1);
+            color: #D97706;
+        }
+
+        .career-badge.ambitious {
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+        }
+
+        .career-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .career-tag {
+            padding: 0.4rem 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .traits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .method-step {
+                grid-template-columns: 60px 1fr;
+            }
+
+            .step-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Question Bank (Enhanced)
+        const QUESTION_BANK = {
+            analytical: [
+                {
+                    id: 'q1',
+                    text: 'When faced with a complex problem, which approach resonates most with you?',
+                    dimension: 'Analytical Thinking',
+                    hint: 'This reveals your natural problem-solving methodology',
+                    options: [
+                        { value: 5, text: 'Break it into logical components and solve systematically' },
+                        { value: 4, text: 'Research proven methodologies and apply them strategically' },
+                        { value: 3, text: 'Collaborate to gather diverse perspectives before deciding' },
+                        { value: 2, text: 'Experiment with multiple approaches iteratively' },
+                        { value: 1, text: 'Rely on intuition and creative problem-solving' }
+                    ]
+                },
+                {
+                    id: 'q2',
+                    text: 'How comfortable are you analyzing quantitative data and numerical patterns?',
+                    dimension: 'Analytical Thinking',
+                    hint: 'Understanding your affinity for data-driven analysis',
+                    options: [
+                        { value: 5, text: 'Highly comfortable - I excel at interpreting complex datasets' },
+                        { value: 4, text: 'Quite comfortable - Numbers and statistics make sense to me' },
+                        { value: 3, text: 'Moderately comfortable - Can handle when necessary' },
+                        { value: 2, text: 'Somewhat uncomfortable - Prefer qualitative approaches' },
+                        { value: 1, text: 'Very uncomfortable - Actively avoid numerical tasks' }
+                    ]
+                }
+            ],
+            creative: [
+                {
+                    id: 'q3',
+                    text: 'Which type of work energizes you most?',
+                    dimension: 'Creativity',
+                    hint: 'Identifying your creative engagement style',
+                    options: [
+                        { value: 5, text: 'Designing completely novel solutions and concepts' },
+                        { value: 4, text: 'Innovating within existing frameworks' },
+                        { value: 3, text: 'Balancing creativity with practical constraints' },
+                        { value: 2, text: 'Optimizing and refining established systems' },
+                        { value: 1, text: 'Following proven processes and procedures' }
+                    ]
+                },
+                {
+                    id: 'q4',
+                    text: 'In collaborative environments, you typically contribute by...',
+                    dimension: 'Creativity',
+                    hint: 'Assessing your creative team dynamics',
+                    options: [
+                        { value: 5, text: 'Generating breakthrough ideas and unique perspectives' },
+                        { value: 4, text: 'Enhancing others\' ideas with creative additions' },
+                        { value: 3, text: 'Bridging creative vision with practical execution' },
+                        { value: 2, text: 'Ensuring efficient implementation of plans' },
+                        { value: 1, text: 'Maintaining quality through structured processes' }
+                    ]
+                }
+            ],
+            social: [
+                {
+                    id: 'q5',
+                    text: 'Your ideal professional environment involves...',
+                    dimension: 'Social Orientation',
+                    hint: 'Understanding your interpersonal preferences',
+                    options: [
+                        { value: 5, text: 'Constant collaboration with diverse teams' },
+                        { value: 4, text: 'Regular interaction with select colleagues' },
+                        { value: 3, text: 'Balance between teamwork and independent work' },
+                        { value: 2, text: 'Primarily independent with occasional collaboration' },
+                        { value: 1, text: 'Autonomous work with minimal interpersonal demands' }
+                    ]
+                },
+                {
+                    id: 'q6',
+                    text: 'Collaborative work makes you feel...',
+                    dimension: 'Social Orientation',
+                    hint: 'Measuring your energy from social interaction',
+                    options: [
+                        { value: 5, text: 'Energized and at my professional best' },
+                        { value: 4, text: 'Engaged and productive most of the time' },
+                        { value: 3, text: 'Neutral - equally effective alone or in teams' },
+                        { value: 2, text: 'Competent but prefer independent work' },
+                        { value: 1, text: 'Drained - most effective working independently' }
+                    ]
+                }
+            ],
+            leadership: [
+                {
+                    id: 'q7',
+                    text: 'When leadership is needed in your group, you...',
+                    dimension: 'Leadership',
+                    hint: 'Evaluating your leadership inclination',
+                    options: [
+                        { value: 5, text: 'Naturally assume responsibility and guide the team' },
+                        { value: 4, text: 'Step up when the situation requires it' },
+                        { value: 3, text: 'Contribute equally without seeking leadership' },
+                        { value: 2, text: 'Prefer supporting roles while others lead' },
+                        { value: 1, text: 'Most effective as an individual contributor' }
+                    ]
+                }
+            ],
+            systematic: [
+                {
+                    id: 'q8',
+                    text: 'Your approach to complex project planning involves...',
+                    dimension: 'Systematic Thinking',
+                    hint: 'Assessing your organizational methodology',
+                    options: [
+                        { value: 5, text: 'Comprehensive planning with detailed timelines and milestones' },
+                        { value: 4, text: 'Structured framework with flexibility for adjustments' },
+                        { value: 3, text: 'High-level roadmap with adaptive execution' },
+                        { value: 2, text: 'Minimal planning, responding to evolving needs' },
+                        { value: 1, text: 'Spontaneous approach with organic development' }
+                    ]
+                }
+            ],
+            risktolerance: [
+                {
+                    id: 'q9',
+                    text: 'In professional decision-making, you gravitate toward...',
+                    dimension: 'Risk Tolerance',
+                    hint: 'Understanding your comfort with uncertainty',
+                    options: [
+                        { value: 5, text: 'High-potential opportunities despite uncertainty' },
+                        { value: 4, text: 'Calculated risks backed by thorough analysis' },
+                        { value: 3, text: 'Balanced approach between security and opportunity' },
+                        { value: 2, text: 'Stable paths with predictable trajectories' },
+                        { value: 1, text: 'Maximum security and minimal uncertainty' }
+                    ]
+                }
+            ]
+        };
+
+        const TRAIT_DIMENSIONS = [
+            { id: 'analytical', name: 'Analytical Thinking', emoji: '🧮' },
+            { id: 'creative', name: 'Creative Intelligence', emoji: '💡' },
+            { id: 'social', name: 'Interpersonal Skills', emoji: '🤝' },
+            { id: 'leadership', name: 'Leadership Aptitude', emoji: '⭐' },
+            { id: 'systematic', name: 'Strategic Planning', emoji: '📊' },
+            { id: 'risktolerance', name: 'Risk Tolerance', emoji: '🎯' }
+        ];
+
+        const CAREERS = [
+            {
+                id: 'c1',
+                name: 'Software Engineer',
+                stream: 'Science/Technology',
+                domain: 'Technology',
+                requirements: {
+                    analytical: { min: 3.5, weight: 0.4 },
+                    systematic: { min: 3.0, weight: 0.3 },
+                    creative: { min: 2.5, weight: 0.2 },
+                    social: { min: 1.5, weight: 0.1 }
+                },
+                pathway: 'B.Tech Computer Science → Software Development',
+                tags: ['High Demand', 'Remote Work', 'Innovation', 'Tech']
+            },
+            {
+                id: 'c2',
+                name: 'UX/UI Designer',
+                stream: 'Design/Technology',
+                domain: 'Product Design',
+                requirements: {
+                    creative: { min: 4.0, weight: 0.5 },
+                    analytical: { min: 2.5, weight: 0.2 },
+                    social: { min: 3.0, weight: 0.3 }
+                },
+                pathway: 'Design Degree → Portfolio → Tech Industry',
+                tags: ['Creative', 'User-Centric', 'Growing Field']
+            },
+            {
+                id: 'c3',
+                name: 'Data Scientist',
+                stream: 'Science/Mathematics',
+                domain: 'Analytics',
+                requirements: {
+                    analytical: { min: 4.5, weight: 0.5 },
+                    systematic: { min: 3.5, weight: 0.3 },
+                    creative: { min: 2.5, weight: 0.2 }
+                },
+                pathway: 'B.Tech/B.Sc. → ML/Stats → Industry',
+                tags: ['AI/ML', 'High Growth', 'Research']
+            },
+            {
+                id: 'c4',
+                name: 'Product Manager',
+                stream: 'Business/Technology',
+                domain: 'Product Management',
+                requirements: {
+                    leadership: { min: 4.0, weight: 0.3 },
+                    analytical: { min: 3.5, weight: 0.3 },
+                    social: { min: 3.5, weight: 0.2 },
+                    creative: { min: 3.0, weight: 0.2 }
+                },
+                pathway: 'Tech/Business Degree → PM Role → Leadership',
+                tags: ['Strategic', 'Leadership', 'Innovation']
+            },
+            {
+                id: 'c5',
+                name: 'Clinical Psychologist',
+                stream: 'Psychology/Healthcare',
+                domain: 'Mental Health',
+                requirements: {
+                    social: { min: 4.0, weight: 0.4 },
+                    analytical: { min: 3.0, weight: 0.3 },
+                    systematic: { min: 3.0, weight: 0.3 }
+                },
+                pathway: 'BA Psychology → MA → MPhil/PhD',
+                tags: ['Helping Others', 'Meaningful', 'Healthcare']
+            },
+            {
+                id: 'c6',
+                name: 'Entrepreneur',
+                stream: 'Business',
+                domain: 'Startup',
+                requirements: {
+                    risktolerance: { min: 4.0, weight: 0.3 },
+                    leadership: { min: 4.0, weight: 0.3 },
+                    creative: { min: 3.5, weight: 0.2 },
+                    social: { min: 3.0, weight: 0.2 }
+                },
+                pathway: 'Any Degree → Startup → Scale Business',
+                tags: ['Independence', 'High Risk-Reward', 'Impact']
+            },
+            {
+                id: 'c7',
+                name: 'Investment Banker',
+                stream: 'Finance/Business',
+                domain: 'Finance',
+                requirements: {
+                    analytical: { min: 4.0, weight: 0.4 },
+                    systematic: { min: 3.5, weight: 0.3 },
+                    risktolerance: { min: 3.0, weight: 0.3 }
+                },
+                pathway: 'B.Com/BBA → MBA → Investment Banking',
+                tags: ['Finance', 'High Compensation', 'Analytical']
+            },
+            {
+                id: 'c8',
+                name: 'Management Consultant',
+                stream: 'Business',
+                domain: 'Consulting',
+                requirements: {
+                    analytical: { min: 4.0, weight: 0.3 },
+                    social: { min: 3.5, weight: 0.3 },
+                    leadership: { min: 3.5, weight: 0.2 },
+                    systematic: { min: 3.0, weight: 0.2 }
+                },
+                pathway: 'Top Degree → Consulting Firm → Partner',
+                tags: ['Strategy', 'Problem Solving', 'Client-Facing']
+            }
+        ];
+
+        // Adaptive Engine
+        class AdaptiveEngine {
+            constructor() {
+                this.traitScores = {};
+                this.traitVariances = {};
+                this.questionHistory = [];
+                
+                TRAIT_DIMENSIONS.forEach(trait => {
+                    this.traitScores[trait.id] = 3.0;
+                    this.traitVariances[trait.id] = 2.0;
+                });
+            }
+
+            getNextQuestion() {
+                let maxVariance = 0;
+                let targetDimension = null;
+
+                for (let dim in this.traitVariances) {
+                    if (this.traitVariances[dim] > maxVariance) {
+                        maxVariance = this.traitVariances[dim];
+                        targetDimension = dim;
+                    }
+                }
+
+                const askedIds = new Set(this.questionHistory.map(q => q.id));
+                const availableQuestions = QUESTION_BANK[targetDimension]?.filter(
+                    q => !askedIds.has(q.id)
+                );
+
+                return availableQuestions?.[0] || null;
+            }
+
+            updateTraits(questionId, dimension, answerValue) {
+                const alpha = 0.3;
+                
+                this.traitScores[dimension] = 
+                    alpha * this.traitScores[dimension] + 
+                    (1 - alpha) * answerValue;
+
+                this.traitVariances[dimension] *= 0.7;
+                this.questionHistory.push({ id: questionId, dimension, value: answerValue });
+            }
+
+            shouldStopQuestioning() {
+                const avgVariance = Object.values(this.traitVariances).reduce((a, b) => a + b, 0) / 
+                                   Object.keys(this.traitVariances).length;
+                
+                return avgVariance < 0.3 || this.questionHistory.length >= 12;
+            }
+
+            getTraitResults() {
+                return TRAIT_DIMENSIONS.map(trait => ({
+                    id: trait.id,
+                    name: trait.name,
+                    emoji: trait.emoji,
+                    score: Math.round(this.traitScores[trait.id] * 10) / 10,
+                    variance: this.traitVariances[trait.id],
+                    confidence: Math.round((1 - this.traitVariances[trait.id] / 2) * 100)
+                }));
+            }
+        }
+
+        // Career Engine
+        class CareerEngine {
+            constructor(traitScores) {
+                this.traitScores = traitScores;
+            }
+
+            scoreCareer(career) {
+                let fitScore = 0;
+                let totalWeight = 0;
+
+                for (let trait in career.requirements) {
+                    const req = career.requirements[trait];
+                    const userScore = this.traitScores[trait] || 3.0;
+                    const match = Math.max(0, Math.min(1, (userScore - req.min + 1) / 2));
+                    
+                    fitScore += match * req.weight;
+                    totalWeight += req.weight;
+                }
+
+                const normalizedFit = totalWeight > 0 ? fitScore / totalWeight : 0;
+                const feasibilityScore = 0.8;
+                const finalScore = 0.7 * normalizedFit + 0.3 * feasibilityScore;
+
+                let band = 'safe';
+                if (normalizedFit < 0.6) band = 'ambitious';
+                else if (normalizedFit < 0.8) band = 'moderate';
+
+                return {
+                    career: career,
+                    fitScore: Math.round(normalizedFit * 100),
+                    feasibilityScore: Math.round(feasibilityScore * 100),
+                    finalScore: Math.round(finalScore * 100),
+                    band: band
+                };
+            }
+
+            getRecommendations() {
+                const scored = CAREERS.map(career => this.scoreCareer(career));
+                return scored.sort((a, b) => b.finalScore - a.finalScore);
+            }
+        }
+
+        // Main App
+        function App() {
+            const [view, setView] = useState('landing');
+            const [engine, setEngine] = useState(null);
+            const [currentQuestion, setCurrentQuestion] = useState(null);
+            const [selectedAnswer, setSelectedAnswer] = useState(null);
+            const [questionNumber, setQuestionNumber] = useState(0);
+            const [results, setResults] = useState(null);
+
+            const startAssessment = () => {
+                const newEngine = new AdaptiveEngine();
+                setEngine(newEngine);
+                const firstQ = newEngine.getNextQuestion();
+                setCurrentQuestion(firstQ);
+                setQuestionNumber(1);
+                setView('assessment');
+            };
+
+            const handleNext = () => {
+                if (!selectedAnswer || !engine) return;
+
+                const dimKey = currentQuestion.dimension.toLowerCase().replace(' ', '');
+                engine.updateTraits(currentQuestion.id, dimKey, selectedAnswer.value);
+
+                if (engine.shouldStopQuestioning()) {
+                    finishAssessment();
+                    return;
+                }
+
+                const nextQ = engine.getNextQuestion();
+                if (nextQ) {
+                    setCurrentQuestion(nextQ);
+                    setSelectedAnswer(null);
+                    setQuestionNumber(prev => prev + 1);
+                } else {
+                    finishAssessment();
+                }
+            };
+
+            const finishAssessment = () => {
+                const traits = engine.getTraitResults();
+                const scores = {};
+                traits.forEach(t => scores[t.id] = t.score);
+
+                const careerEngine = new CareerEngine(scores);
+                const recommendations = careerEngine.getRecommendations();
+
+                setResults({ traits, careers: recommendations });
+                setView('results');
+            };
+
+            const resetApp = () => {
+                setView('landing');
+                setEngine(null);
+                setCurrentQuestion(null);
+                setSelectedAnswer(null);
+                setQuestionNumber(0);
+                setResults(null);
+            };
+
+            return (
+                <>
+                    <Header view={view} onReset={resetApp} onStart={startAssessment} />
+                    
+                    {view === 'landing' && <LandingPage onStart={startAssessment} />}
+                    {view === 'assessment' && currentQuestion && (
+                        <AssessmentView
+                            question={currentQuestion}
+                            questionNumber={questionNumber}
+                            selectedAnswer={selectedAnswer}
+                            onAnswerSelect={setSelectedAnswer}
+                            onNext={handleNext}
+                        />
+                    )}
+                    {view === 'results' && results && (
+                        <ResultsView results={results} onReset={resetApp} />
+                    )}
+                </>
+            );
+        }
+
+        // Components
+        function Header({ view, onReset, onStart }) {
+            return (
+                <header className="header">
+                    <div className="header-content">
+                        <div className="logo" onClick={onReset}>
+                            NabbleAI<span className="logo-dot"></span>
+                        </div>
+                        <nav className="nav">
+                            {view === 'landing' ? (
+                                <>
+                                    <a href="#methodology" className="nav-link">Methodology</a>
+                                    <a href="#features" className="nav-link">Features</a>
+                                    <a href="#" className="nav-link">About</a>
+                                    <button className="btn btn-primary" onClick={onStart}>
+                                        Get Started
+                                    </button>
+                                </>
+                            ) : (
+                                <button className="btn btn-secondary" onClick={onReset}>
+                                    ← Back to Home
+                                </button>
+                            )}
+                        </nav>
+                    </div>
+                </header>
+            );
+        }
+
+        function LandingPage({ onStart }) {
+            return (
+                <>
+                    <section className="hero">
+                        <div className="hero-content">
+                            <div className="hero-text">
+                                <h1>
+                                    Stop Guessing Your Future. <span className="hero-highlight">Discover It.</span>
+                                </h1>
+                                <p className="hero-subtitle">
+                                    Advanced AI-powered psychometric assessment that maps your cognitive architecture 
+                                    and matches you with careers where you'll naturally excel.
+                                </p>
+                                <div className="hero-cta">
+                                    <button className="btn btn-primary btn-large" onClick={onStart}>
+                                        Start Assessment →
+                                    </button>
+                                    <button className="btn btn-secondary btn-large">
+                                        View Methodology
+                                    </button>
+                                </div>
+                                <div className="hero-stats">
+                                    <div className="stat-item">
+                                        <div className="stat-number">98.2%</div>
+                                        <div className="stat-label">Precision Score</div>
+                                    </div>
+                                    <div className="stat-item">
+                                        <div className="stat-number">50,000+</div>
+                                        <div className="stat-label">Students Assessed</div>
+                                    </div>
+                                    <div className="stat-item">
+                                        <div className="stat-number">12 min</div>
+                                        <div className="stat-label">Average Duration</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="hero-visual">
+                                <div className="cognitive-card cognitive-card-1">
+                                    <div className="card-title">Analytical</div>
+                                    <div className="card-value">94.2</div>
+                                    <div className="progress-mini">
+                                        <div className="progress-mini-fill" style={{width: '94%'}}></div>
+                                    </div>
+                                </div>
+                                <div className="cognitive-card cognitive-card-2">
+                                    <div className="card-title">Top Match</div>
+                                    <div className="card-value">Data Scientist</div>
+                                </div>
+                                <div className="cognitive-card cognitive-card-3">
+                                    <div className="card-title">Creative</div>
+                                    <div className="card-value">87.5</div>
+                                    <div className="progress-mini">
+                                        <div className="progress-mini-fill" style={{width: '87%'}}></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="features" className="section">
+                        <div className="section-header">
+                            <div className="section-label">Core Intelligence Engine</div>
+                            <h2 className="section-title">Beyond Standard Testing</h2>
+                            <p className="section-description">
+                                Our platform combines psychometric rigor with modern data science to provide 
+                                a complete picture of your professional potential.
+                            </p>
+                        </div>
+                        <div className="features-grid">
+                            <div className="feature-card">
+                                <div className="feature-icon">🧠</div>
+                                <h3>Cognitive Architecture Mapping</h3>
+                                <p>
+                                    We analyze how you think, not just what you know. Our algorithms examine 
+                                    problem-solving patterns, memory retention, and logical processing speed.
+                                </p>
+                            </div>
+                            <div className="feature-card">
+                                <div className="feature-icon">🎯</div>
+                                <h3>Precision Matching</h3>
+                                <p>
+                                    Match your profile against hundreds of career paths with high-fidelity 
+                                    compatibility scores backed by real success data.
+                                </p>
+                            </div>
+                            <div className="feature-card">
+                                <div className="feature-icon">📈</div>
+                                <h3>Growth Trajectory</h3>
+                                <p>
+                                    Identify skill gaps and receive a personalized roadmap to bridge them 
+                                    effectively with measurable milestones.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="methodology" className="section methodology">
+                        <div className="section-header">
+                            <div className="section-label">The NabbleAI Method</div>
+                            <h2 className="section-title">Science-Backed Assessment</h2>
+                            <p className="section-description">
+                                Our proprietary methodology combines adaptive testing with advanced analytics 
+                                to reveal your true cognitive profile.
+                            </p>
+                        </div>
+                        <div className="method-steps">
+                            <div className="method-step">
+                                <div className="step-number">1</div>
+                                <div className="step-content">
+                                    <h3>Adaptive Cognitive Assessment</h3>
+                                    <p>
+                                        Our AI-powered test adapts to your responses in real-time, focusing on areas 
+                                        of uncertainty while avoiding redundant questions. This intelligent approach 
+                                        reduces testing time by 70% while maintaining scientific precision.
+                                    </p>
+                                    <div className="step-features">
+                                        <span className="step-feature-tag">✓ Adaptive Difficulty</span>
+                                        <span className="step-feature-tag">✓ 12-Minute Duration</span>
+                                        <span className="step-feature-tag">✓ Real-Time Analysis</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="method-step">
+                                <div className="step-number">2</div>
+                                <div className="step-content">
+                                    <h3>Deep Profile Analysis</h3>
+                                    <p>
+                                        Advanced algorithms analyze your cognitive patterns across six key dimensions, 
+                                        identifying natural strengths, hidden potential, and areas for development 
+                                        with unprecedented accuracy.
+                                    </p>
+                                    <div className="step-features">
+                                        <span className="step-feature-tag">✓ Multi-Dimensional</span>
+                                        <span className="step-feature-tag">✓ Pattern Recognition</span>
+                                        <span className="step-feature-tag">✓ 98.2% Precision</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="method-step">
+                                <div className="step-number">3</div>
+                                <div className="step-content">
+                                    <h3>Personalized Career Mapping</h3>
+                                    <p>
+                                        Receive detailed career recommendations matched to your unique cognitive profile, 
+                                        complete with growth pathways, skill requirements, and strategic guidance for 
+                                        achieving your professional goals.
+                                    </p>
+                                    <div className="step-features">
+                                        <span className="step-feature-tag">✓ 200+ Career Paths</span>
+                                        <span className="step-feature-tag">✓ Actionable Roadmaps</span>
+                                        <span className="step-feature-tag">✓ Success Predictors</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </>
+            );
+        }
+
+        function AssessmentView({ question, questionNumber, selectedAnswer, onAnswerSelect, onNext }) {
+            const progress = (questionNumber / 12) * 100;
+
+            return (
+                <div className="assessment-container">
+                    <div className="assessment-wrapper">
+                        <div className="progress-header">
+                            <div className="progress-info">
+                                <span className="progress-label">
+                                    Question {questionNumber} of 12
+                                </span>
+                                <span className="progress-percentage">
+                                    {Math.round(progress)}%
+                                </span>
+                            </div>
+                            <div className="progress-bar">
+                                <div className="progress-fill" style={{ width: `${progress}%` }} />
+                            </div>
+                        </div>
+
+                        <div className="question-card">
+                            <div className="question-meta">
+                                📊 {question.dimension}
+                            </div>
+                            
+                            <h2 className="question-text">{question.text}</h2>
+
+                            <div className="question-hint">
+                                💡 {question.hint}
+                            </div>
+
+                            <div className="answer-grid">
+                                {question.options.map((option, idx) => (
+                                    <div
+                                        key={idx}
+                                        className={`answer-option ${selectedAnswer === option ? 'selected' : ''}`}
+                                        onClick={() => onAnswerSelect(option)}
+                                    >
+                                        <div className="option-radio"></div>
+                                        <div className="option-text">{option.text}</div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="question-actions">
+                                <button 
+                                    className="btn btn-primary btn-large"
+                                    onClick={onNext}
+                                    disabled={!selectedAnswer}
+                                >
+                                    Next Question →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ResultsView({ results, onReset }) {
+            return (
+                <div className="results-container">
+                    <div className="results-wrapper">
+                        <div className="results-hero">
+                            <h1>🎯 Your Cognitive Profile</h1>
+                            <p>Based on advanced psychometric analysis</p>
+                        </div>
+
+                        <div className="results-section">
+                            <h2 className="results-section-title">Cognitive Architecture</h2>
+                            <div className="traits-grid">
+                                {results.traits.map(trait => (
+                                    <div key={trait.id} className="trait-item">
+                                        <div className="trait-header">
+                                            <div className="trait-name">
+                                                <span>{trait.emoji}</span> {trait.name}
+                                            </div>
+                                            <div className="trait-score">{trait.score}/5</div>
+                                        </div>
+                                        <div className="trait-bar">
+                                            <div 
+                                                className="trait-bar-fill"
+                                                style={{ width: `${(trait.score / 5) * 100}%` }}
+                                            />
+                                        </div>
+                                        <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                                            Confidence: {trait.confidence}%
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="results-section">
+                            <h2 className="results-section-title">Career Recommendations</h2>
+                            
+                            {results.careers.slice(0, 6).map((rec, idx) => (
+                                <div key={rec.career.id} className="career-card">
+                                    <div className="career-header">
+                                        <div>
+                                            <h3 className="career-title">
+                                                {idx + 1}. {rec.career.name}
+                                            </h3>
+                                            <div className={`career-badge ${rec.band}`}>
+                                                {rec.band.toUpperCase()} MATCH
+                                            </div>
+                                        </div>
+                                        <div className="career-match">{rec.fitScore}%</div>
+                                    </div>
+
+                                    <div className="career-tags">
+                                        <span className="career-tag">📚 {rec.career.stream}</span>
+                                        <span className="career-tag">💼 {rec.career.domain}</span>
+                                        {rec.career.tags.map(tag => (
+                                            <span key={tag} className="career-tag">{tag}</span>
+                                        ))}
+                                    </div>
+
+                                    <p style={{ marginBottom: '1rem', color: 'var(--text-secondary)' }}>
+                                        <strong style={{ color: 'var(--text-primary)' }}>Pathway:</strong> {rec.career.pathway}
+                                    </p>
+
+                                    <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.7' }}>
+                                        This career aligns with your cognitive profile based on advanced psychometric analysis. 
+                                        The {rec.fitScore}% compatibility score indicates strong natural aptitude.
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div style={{ textAlign: 'center', marginTop: '3rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                            <button className="btn btn-primary btn-large">
+                                📄 Download Full Report
+                            </button>
+                            <button className="btn btn-secondary btn-large" onClick={onReset}>
+                                🔄 Retake Assessment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
